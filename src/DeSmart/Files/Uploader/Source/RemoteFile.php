@@ -72,8 +72,9 @@ class RemoteFile implements SourceInterface {
 
   public function getName() {
     $name = pathinfo($this->url, \PATHINFO_FILENAME);
+    $extension = $this->getExtension();
 
-    return preg_replace('/[^a-zA-Z0-9]+/', '_', $name);
+    return preg_replace('/[^a-zA-Z0-9]+/', '_', $name).".{$extension}";
   }
 
   public function getSize() {
@@ -118,7 +119,7 @@ class RemoteFile implements SourceInterface {
     }
 
     $request = $this->guzzle->get($this->url);
-    $this->response = $request->getResponse();
+    $this->response = $request->send();
   }
 
 }

@@ -17,7 +17,7 @@ class UploaderSourceRemoteFileTest extends \PHPUnit_Framework_TestCase {
     $guesser = m::mock('Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface');
 
     $response->shouldReceive('getContentType')->once()->andReturn($mime = 'image/jpeg');
-    $request->shouldReceive('getResponse')->once()->andReturn($response);
+    $request->shouldReceive('send')->once()->andReturn($response);
     $guzzle->shouldReceive('get')->once()->with($url)->andReturn($request);
     $guesser->shouldReceive('guess')->once()->with($mime)->andReturn($ext = 'jpeg');
 
@@ -30,18 +30,20 @@ class UploaderSourceRemoteFileTest extends \PHPUnit_Framework_TestCase {
   /**
    * @dataProvider getNameProvider
    */
-  public function testGetName($url, $expected) {
-    $source = new RemoteFile($url);
+  public function testGetName($url, $guessedExtension, $expected) {
+    $source = $this->getMock('DeSmart\Files\Uploader\Source\RemoteFile', array('getExtension'), array($url));
+    $source->expects($this->once())->method('getExtension')->will($this->returnValue($guessedExtension));
+
     $this->assertEquals($expected, $source->getName());
   }
 
   public function getNameProvider() {
     return array(
-      array('http://wp.pl/foo/bar/baz.jpg', 'baz'),
-      array('http://wp.pl/foobaz.jpg', 'foobaz'),
-      array('https://i.chzbgr.com/maxW500/7887742208/h9FA24865/', 'h9FA24865'),
-      array('https://i.chzbgr.com/maxW500/7887742208/h9 FA2++4865/', 'h9_FA2_4865'),
-      array('https://i.chzbgr.com/maxW500/7887742208/h9 FA2+4865/', 'h9_FA2_4865'),
+      array('http://wp.pl/foo/bar/baz.jpg', 'jpg', 'baz.jpg'),
+      array('http://wp.pl/foobaz.jpg', 'jpg', 'foobaz.jpg'),
+      array('https://i.chzbgr.com/maxW500/7887742208/h9FA24865/', 'jpg', 'h9FA24865.jpg'),
+      array('https://i.chzbgr.com/maxW500/7887742208/h9 FA2++4865/', 'gif', 'h9_FA2_4865.gif'),
+      array('https://i.chzbgr.com/maxW500/7887742208/h9 FA2+4865/', 'gif', 'h9_FA2_4865.gif'),
     );
   }
 
@@ -54,7 +56,7 @@ class UploaderSourceRemoteFileTest extends \PHPUnit_Framework_TestCase {
 
     $body->shouldReceive('getSize')->once()->andReturn($size = 1235231);
     $response->shouldReceive('getBody')->once()->andReturn($body);
-    $request->shouldReceive('getResponse')->once()->andReturn($response);
+    $request->shouldReceive('send')->once()->andReturn($response);
     $guzzle->shouldReceive('get')->once()->with($url)->andReturn($request);
 
     $source->setGuzzle($guzzle);
@@ -69,7 +71,7 @@ class UploaderSourceRemoteFileTest extends \PHPUnit_Framework_TestCase {
     $guzzle = m::mock('Guzzle\Http\Client');
 
     $response->shouldReceive('getContentType')->once()->andReturn($mime = 'image/jpeg');
-    $request->shouldReceive('getResponse')->once()->andReturn($response);
+    $request->shouldReceive('send')->once()->andReturn($response);
     $guzzle->shouldReceive('get')->once()->with($url)->andReturn($request);
 
     $source->setGuzzle($guzzle);
@@ -95,7 +97,7 @@ class UploaderSourceRemoteFileTest extends \PHPUnit_Framework_TestCase {
     };
 
     $response->shouldReceive('getBody')->once()->with(true)->andReturn($body = 'lulz');
-    $request->shouldReceive('getResponse')->once()->andReturn($response);
+    $request->shouldReceive('send')->once()->andReturn($response);
     $guzzle->shouldReceive('get')->once()->with($url)->andReturn($request);
     $fs->shouldReceive('put')->once()->with(m::on($matcher), $body);
 

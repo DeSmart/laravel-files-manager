@@ -1,6 +1,8 @@
 <?php namespace DeSmart\Files\Model;
 
-class File extends \Eloquent {
+use DeSmart\Files\Uploader\SourceInterface;
+
+class File extends \DeSmart\Model\Model {
 
   protected $primaryKey = 'id_file';
 
@@ -35,6 +37,23 @@ class File extends \Eloquent {
    */
   public function getUrl() {
     return sprintf('%s/u/%s%s', \Config::get('app.dms_url'), $this->path, $this->original_name);
+  }
+
+  public function setPathAttribute($path) {
+    $this->attributes['path'] = rtrim($path, '/').'/';
+  }
+
+  public function createFromUpload(SourceInterface $source, $path) {
+    $model = new self;
+    $model->date = new \DateTime();
+    $model->extension = $source->getExtension();
+    $model->name = $source->getName();
+    $model->original_name = $source->getName();
+    $model->path = $path;
+    $model->type = $source->getMimeType();
+    $model->size = $source->getSize();
+
+    return $model;
   }
 
 }
