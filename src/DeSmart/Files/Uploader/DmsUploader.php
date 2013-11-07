@@ -21,7 +21,7 @@ class DmsUploader extends AbstractUploader {
   protected $response;
 
   public function __construct($dmsUrl = null) {
-    $this->dmsUrl = $dmsUrl;
+    $this->dmsUrl = $dmsUrl ?: \Config::get('app.dms_url');
     $this->setGuzzle(new Client);
   }
 
