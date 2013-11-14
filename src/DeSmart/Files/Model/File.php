@@ -8,6 +8,8 @@ class File extends \DeSmart\Model\Model {
 
   protected $table = 'files2records_files';
 
+  protected $collection = 'DeSmart\Files\Collection';
+
   protected static $unguarded = true;
 
   public function fileable() {

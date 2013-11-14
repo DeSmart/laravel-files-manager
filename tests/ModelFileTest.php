@@ -29,4 +29,9 @@ class ModelFileTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals($size, $model->size);
   }
 
+  public function testNewCollectionReturnsFileCollection() {
+    $model = new File;
+    $this->assertInstanceOf('DeSmart\Files\Collection', $model->newCollection());
+  }
+
 }
