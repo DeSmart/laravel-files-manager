@@ -15,7 +15,7 @@ class RemoteFile implements SourceInterface {
   protected $url;
 
   /**
-   * @var \Symfony\Component\HttpFoundation\File\MimeType
+   * @var \Symfony\Component\HttpFoundation\File\MimeType\MimeTypeExtensionGuesser
    */
   protected $guesser;
 
