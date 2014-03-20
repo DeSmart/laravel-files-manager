@@ -46,7 +46,7 @@ class File extends \DeSmart\Model\Model {
   }
 
   public function createFromUpload(SourceInterface $source, $path) {
-    $model = new self;
+    $model = new static;
     $model->date = new \DateTime();
     $model->extension = $source->getExtension();
     $model->name = $source->getName();

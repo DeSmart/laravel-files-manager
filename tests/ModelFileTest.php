@@ -17,7 +17,8 @@ class ModelFileTest extends \PHPUnit_Framework_TestCase {
     $source->shouldReceive('getMimeType')->once()->andReturn($mime = 'image/jpeg');
     $path = 'ab/cd/';
 
-    $model = File::createFromUpload($source, $path);
+    $file = new File;
+    $model = $file->createFromUpload($source, $path);
 
     $this->assertInstanceOf('\DeSmart\Files\Model\File', $model);
     $this->assertInstanceOf('DateTime', $model->date);
