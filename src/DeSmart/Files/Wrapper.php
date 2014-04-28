@@ -1,6 +1,7 @@
 <?php namespace DeSmart\Files;
 
 use DeSmart\Files\Model\File;
+use Illuminate\Config\Repository as ConfigRepository;
 
 /**
  * Prosty skrypt generujacy sciezke do resize image w DMSie
@@ -11,6 +12,11 @@ class Wrapper {
    * @var \DeSmart\Files\Model\File
    */
   protected $file;
+
+  /**
+   * @var \Illuminate\Config\Repository
+   */
+  protected $config;
 
   protected $properties = array(
     'width' => 0,
@@ -25,9 +31,10 @@ class Wrapper {
     ),
   );
 
-  public function __construct(File $file) {
+  public function __construct(File $file, ConfigRepository $config = null) {
     $this->file = $file;
     $this->properties['type'] = $this->guessImageType();
+    $this->config = $config ?: \Config::getFacadeRoot();
   }
 
   /**
@@ -108,7 +115,7 @@ class Wrapper {
 
     return sprintf(
       '%s/ResizeImage/%s%s,%s,%s,%s,%s_%s',
-      \Config::get('app.dms_url'),
+      $this->config->get('app.dms_url'),
       $this->file->path,
       $width,
       $height,

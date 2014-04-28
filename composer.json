@@ -12,6 +12,7 @@
         "desmart/model": "~1.0.5",
         "illuminate/filesystem": "4.0.*",
         "illuminate/support": "4.0.*",
+        "illuminate/config": "4.0.*",
         "guzzle/http": "3.7.*",
         "symfony/http-foundation": "2.3.*"
     },
