@@ -17,7 +17,7 @@ class ModelFileTest extends \PHPUnit_Framework_TestCase {
     $source->shouldReceive('getMimeType')->once()->andReturn($mime = 'image/jpeg');
     $path = 'ab/cd/';
 
-    $file = new File;
+    $file = new File(array(), 'http://dms.local.com');
     $model = $file->createFromUpload($source, $path);
 
     $this->assertInstanceOf('\DeSmart\Files\Model\File', $model);
@@ -31,13 +31,16 @@ class ModelFileTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testNewCollectionReturnsFileCollection() {
-    $model = new File;
+    $model = new File(array(), 'http://dms.local.com');
     $this->assertInstanceOf('DeSmart\Files\Collection', $model->newCollection());
   }
 
   public function testResize() {
-    $model = new File;
-    $this->assertInstanceOf('DeSmart\Files\Wrapper', $model->resize(10, 10));
+    $file = new File(array(), 'http://dms.local.com');
+    $wrapper = $file->resize(15, 10);
+
+    $this->assertInstanceOf('DeSmart\Files\Wrapper', $wrapper);
+    $this->assertEquals($wrapper->toString(), "http://dms.local.com/ResizeImage/15,10,100,2,_");
   }
 
 }

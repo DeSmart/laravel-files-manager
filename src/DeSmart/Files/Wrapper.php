@@ -13,10 +13,7 @@ class Wrapper {
    */
   protected $file;
 
-  /**
-   * @var \Illuminate\Config\Repository
-   */
-  protected $config;
+  protected $url;
 
   protected $properties = array(
     'width' => 0,
@@ -31,10 +28,15 @@ class Wrapper {
     ),
   );
 
-  public function __construct(File $file, ConfigRepository $config = null) {
+  public function __construct(File $file, $url = null) {
     $this->file = $file;
     $this->properties['type'] = $this->guessImageType();
-    $this->config = $config ?: \Config::getFacadeRoot();
+
+    $this->setUrl($url);
+  }
+
+  public function setUrl($url = null) {
+    $this->url = $url ?: \Config::get('app.dms_url');
   }
 
   /**
@@ -115,7 +117,7 @@ class Wrapper {
 
     return sprintf(
       '%s/ResizeImage/%s%s,%s,%s,%s,%s_%s',
-      $this->config->get('app.dms_url'),
+      $this->url,
       $this->file->path,
       $width,
       $height,

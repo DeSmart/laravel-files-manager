@@ -6,93 +6,90 @@ use DeSmart\Files\Model\File;
 
 class WrapperTest extends \PHPUnit_Framework_TestCase {
 
-  /**
-   * @var Wrapper
-   */
-  protected $wrapper;
-
-  public function setUp() {
-    $file = new File();
-    $file['path'] = 'images/srpr/';
-    $file['original_name'] = 'logo.png';
-
-    $config = m::mock('Illuminate\Config\Repository');
-    $config->shouldReceive('get')->once()->with('app.dms_url')->andReturn('http://dms.local.com');
-
-    $this->wrapper = new Wrapper($file, $config);
-  }
-
   public function tearDown() {
     m::close();
   }
 
   public function testResize() {
-    $resize = $this->wrapper->resize(51, 49);
+    $factory = $this->factory()->resize(51, 49);
 
-    $this->assertEquals($resize->toString(), "http://dms.local.com/ResizeImage/images/srpr/51,49,100,3,_logo.png");
+    $this->assertEquals($factory->toString(), "http://dms.local.com/ResizeImage/images/srpr/51,49,100,3,_logo.png");
   }
 
   public function testQuality() {
-    $quality = $this->wrapper->quality(39);
+    $factory = $this->factory()->quality(39);
 
-    $this->assertEquals($quality->toString(), "http://dms.local.com/ResizeImage/images/srpr/0,0,39,3,_logo.png");
+    $this->assertEquals($factory->toString(), "http://dms.local.com/ResizeImage/images/srpr/0,0,39,3,_logo.png");
   }
 
   public function testCrop() {
-    $this->wrapper->crop();
+    $factory = $this->factory()->crop();
 
-    $this->assertEquals($this->wrapper->toString(), "http://dms.local.com/ResizeImage/images/srpr/0,0,100,3,crop-1_logo.png");
+    $this->assertEquals($factory->toString(), "http://dms.local.com/ResizeImage/images/srpr/0,0,100,3,crop-1_logo.png");
   }
 
   public function testSharpen() {
-    $this->wrapper->sharpen();
+    $factory = $this->factory('logo.jpg')->sharpen();
 
-    $this->assertEquals($this->wrapper->toString(), "http://dms.local.com/ResizeImage/images/srpr/0,0,100,3,sharpen-1_logo.png");
+    $this->assertEquals($factory->toString(), "http://dms.local.com/ResizeImage/images/srpr/0,0,100,2,sharpen-1_logo.jpg");
   }
 
   public function testKeepRatio() {
-    $this->wrapper->keepRatio();
+    $factory = $this->factory('logo.jpg')->keepRatio();
 
-    $this->assertEquals($this->wrapper->toString(), "http://dms.local.com/ResizeImage/images/srpr/0,0,100,3,keepratio-1_logo.png");
+    $this->assertEquals($factory->toString(), "http://dms.local.com/ResizeImage/images/srpr/0,0,100,2,keepratio-1_logo.jpg");
   }
 
   public function testMaxWh() {
-    $this->wrapper->maxWh();
+    $factory = $this->factory()->maxWh();
 
-    $this->assertEquals($this->wrapper->toString(), "http://dms.local.com/ResizeImage/images/srpr/0,0,100,3,maxwh-1_logo.png");
+    $this->assertEquals($factory->toString(), "http://dms.local.com/ResizeImage/images/srpr/0,0,100,3,maxwh-1_logo.png");
   }
 
   public function testResizeAndCrop() {
-    $resize = $this->wrapper->resize(51, 49);
-    $resize->crop();
+    $factory = $this->factory()->resize(51, 49);
+    $factory->crop();
 
-    $this->assertEquals($resize->toString(), "http://dms.local.com/ResizeImage/images/srpr/51,49,100,3,crop-1_logo.png");
+    $this->assertEquals($factory->toString(), "http://dms.local.com/ResizeImage/images/srpr/51,49,100,3,crop-1_logo.png");
   }
 
   public function testKeepRatioAndSharpen() {
-    $this->wrapper->keepRatio();
-    $this->wrapper->sharpen();
+    $factory = $this->factory('logo.gif')->keepRatio()
+        ->sharpen();
 
-    $this->assertEquals($this->wrapper->toString(), "http://dms.local.com/ResizeImage/images/srpr/0,0,100,3,sharpen-1;keepratio-1_logo.png");
+    $this->assertEquals($factory->toString(), "http://dms.local.com/ResizeImage/images/srpr/0,0,100,1,sharpen-1;keepratio-1_logo.gif");
   }
 
   public function testKeepRatioAndCropAndSharpenAndMaxWh() {
-    $this->wrapper->keepRatio();
-    $this->wrapper->crop();
-    $this->wrapper->sharpen();
-    $this->wrapper->maxWh();
+    $factory = $this->factory()->keepRatio()
+      ->crop()
+      ->sharpen()
+      ->maxWh();
 
-    $this->assertEquals($this->wrapper->toString(), "http://dms.local.com/ResizeImage/images/srpr/0,0,100,3,crop-1;sharpen-1;keepratio-1;maxwh-1_logo.png");
+    $this->assertEquals($factory->toString(), "http://dms.local.com/ResizeImage/images/srpr/0,0,100,3,crop-1;sharpen-1;keepratio-1;maxwh-1_logo.png");
   }
 
   public function testCropAndSharpenAndMaxWhAndResizeAndQuality() {
-    $this->wrapper->crop();
-    $this->wrapper->sharpen();
-    $this->wrapper->maxWh();
-    $this->wrapper->resize(19, 81);
-    $this->wrapper->quality(15);
+    $factory = $this->factory()->crop()
+        ->sharpen()
+        ->maxWh()
+        ->resize(19, 81)
+        ->quality(15);
 
-    $this->assertEquals($this->wrapper->toString(), "http://dms.local.com/ResizeImage/images/srpr/19,81,15,3,crop-1;sharpen-1;maxwh-1_logo.png");
+    $this->assertEquals($factory->toString(), "http://dms.local.com/ResizeImage/images/srpr/19,81,15,3,crop-1;sharpen-1;maxwh-1_logo.png");
+  }
+
+  /**
+   * @param string $originalName
+   * @param string $path
+   * @return Wrapper
+   */
+  protected function factory($originalName = 'logo.png', $path = 'images/srpr/') {
+    $file = new File(array(), 'http://dms.local.com');
+    $file['path'] = $path;
+    $file['original_name'] = $originalName;
+
+    return new Wrapper($file, 'http://dms.local.com');
   }
 
 }

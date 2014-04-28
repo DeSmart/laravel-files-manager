@@ -13,6 +13,18 @@ class File extends \DeSmart\Model\Model {
 
   protected static $unguarded = true;
 
+  protected $url;
+
+  public function __construct(array $attributes = array(), $url = null) {
+    parent::__construct($attributes);
+
+    $this->setUrl($url);
+  }
+
+  public function setUrl($url = null) {
+    $this->url = $url ?: \Config::get('app.dms_url');
+  }
+
   public function fileable() {
     return $this->morphTo();
   }
@@ -39,7 +51,7 @@ class File extends \DeSmart\Model\Model {
    * @return string
    */
   public function getUrl() {
-    return sprintf('%s/u/%s%s', \Config::get('app.dms_url'), $this->path, $this->original_name);
+    return sprintf('%s/u/%s%s', $this->url, $this->path, $this->original_name);
   }
 
   public function setPathAttribute($path) {
@@ -47,7 +59,7 @@ class File extends \DeSmart\Model\Model {
   }
 
   public function createFromUpload(SourceInterface $source, $path) {
-    $model = new static;
+    $model = new static(array(), $this->url);
     $model->date = new \DateTime();
     $model->extension = $source->getExtension();
     $model->name = $source->getName();
@@ -60,7 +72,7 @@ class File extends \DeSmart\Model\Model {
   }
 
   public function resize($width, $height) {
-    $wrapper = new Wrapper($this);
+    $wrapper = new Wrapper($this, $this->url);
 
     return $wrapper->resize($width, $height);
   }
