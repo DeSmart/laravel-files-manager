@@ -35,4 +35,9 @@ class ModelFileTest extends \PHPUnit_Framework_TestCase {
     $this->assertInstanceOf('DeSmart\Files\Collection', $model->newCollection());
   }
 
+  public function testResize() {
+    $model = new File;
+    $this->assertInstanceOf('DeSmart\Files\Wrapper', $model->resize(10, 10));
+  }
+
 }
