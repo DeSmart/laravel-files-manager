@@ -1,6 +1,7 @@
 <?php namespace DeSmart\Files\Model;
 
 use DeSmart\Files\Uploader\SourceInterface;
+use DeSmart\Files\Wrapper;
 
 class File extends \DeSmart\Model\Model {
 
@@ -56,6 +57,12 @@ class File extends \DeSmart\Model\Model {
     $model->size = $source->getSize();
 
     return $model;
+  }
+
+  public function resize($width, $height) {
+    $wrapper = new Wrapper($this);
+
+    return $wrapper->resize($width, $height);
   }
 
 }
