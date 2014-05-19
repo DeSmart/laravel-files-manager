@@ -9,6 +9,7 @@ class UploaderSourceLocalFileTest extends \PHPUnit_Framework_TestCase {
 
   public function setUp() {
     $this->filepath = __DIR__.'/stubs/42.jpg';
+    m::getConfiguration()->allowMockingNonExistentMethods(false);
   }
 
   public function tearDown() {

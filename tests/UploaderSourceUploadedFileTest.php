@@ -5,6 +5,10 @@ use DeSmart\Files\Uploader\Source\UploadedFile;
 
 class UploaderSourceUploadedFileTest extends \PHPUnit_Framework_TestCase {
 
+  public function setUp() {
+    m::getConfiguration()->allowMockingNonExistentMethods(false);
+  }
+
   public function tearDown() {
     m::close();
   }
