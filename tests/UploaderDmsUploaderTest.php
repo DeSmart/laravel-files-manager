@@ -6,6 +6,10 @@ use DeSmart\Files\Uploader\DmsUploader;
 
 class UploaderDmsUploaderTest extends \PHPUnit_Framework_TestCase {
 
+  public function setUp() {
+    m::getConfiguration()->allowMockingNonExistentMethods(false);
+  }
+
   public function tearDown() {
     m::close();
   }
