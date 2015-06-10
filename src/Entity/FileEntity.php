@@ -59,7 +59,7 @@ class FileEntity
         if (true === $date instanceof \DateTimeInterface) {
             $this->createdAt = (new \DateTimeImmutable)->setTimestamp($date->getTimestamp());
         } else {
-            $this->createdAt = new \DateTimeImmutable($date);
+            $this->createdAt = is_null($date) ? null : new \DateTimeImmutable($date);
         }
     }
 

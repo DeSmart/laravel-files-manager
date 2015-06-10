@@ -63,4 +63,12 @@ class FileEntityTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(new \DateTimeImmutable($date), $entity->getCreatedAt());
     }
+
+    public function testSettingEmptyDate()
+    {
+        $entity = new FileEntity;
+        $entity->setCreatedAt(null);
+
+        $this->assertNull($entity->getCreatedAt());
+    }
 }
