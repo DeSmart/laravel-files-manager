@@ -1,6 +1,6 @@
 {
     "name": "desmart/files",
-    "description": "Obsluga files2records",
+    "description": "Files management for Laravel",
     "authors": [
         {
             "name": "Radoslaw Mejer",
@@ -8,16 +8,11 @@
         }
     ],
     "require": {
-        "php": ">=5.3.0",
-        "desmart/model": "1.1.*",
-        "illuminate/filesystem": "4.1.*",
-        "illuminate/support": "4.1.*",
-        "guzzle/http": "3.9.*",
-        "symfony/http-foundation": "2.4.*"
+        "php": ">=5.6.0"
     },
     "autoload": {
-        "psr-0": {
-            "DeSmart\\Files": "src/"
+        "psr-4": {
+            "DeSmart\\Files\\": "src/"
         }
     },
     "repositories": [
@@ -26,8 +21,5 @@
         "url": "http://dev:o4ywKVHjvTJwkLHlgyl1@packagist.desmart.com"
       }
     ],
-    "minimum-stability": "dev",
-    "require-dev": {
-        "mockery/mockery": "0.8.*"
-    }
+    "minimum-stability": "dev"
 }
