@@ -16,6 +16,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $entity->setPath('ab/cd/foo.png');
         $entity->setSize(1000);
         $entity->setCreatedAt(null);
+        $entity->setMd5Checksum(md5(time()));
 
         $model = (new File)->createFromEntity($entity);
 
@@ -26,6 +27,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($model->path, $entity->getPath());
         $this->assertEquals($model->size, $entity->getSize());
         $this->assertEquals($model->created_at, $entity->getCreatedAt());
+        $this->assertEquals($model->md5_checksum, $entity->getMd5Checksum());
     }
 
     public function testCreatingFromEntityWithoutIdReturnsNonExistingModel()
