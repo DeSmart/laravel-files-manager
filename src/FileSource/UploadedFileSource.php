@@ -45,4 +45,12 @@ class UploadedFileSource implements FileSourceInterface
     {
         $filesystem->put($destinationPath, file_get_contents($this->file->getPathname()));
     }
+
+    /**
+     * @return string
+     */
+    public function getMd5Checksum()
+    {
+        return md5_file($this->file->getPathname());
+    }
 }

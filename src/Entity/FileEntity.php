@@ -13,6 +13,8 @@ class FileEntity
 
     protected $createdAt;
 
+    protected $md5Checksum;
+
     public function setId($id)
     {
         $this->id = $id;
@@ -66,5 +68,21 @@ class FileEntity
     public function getCreatedAt()
     {
         return $this->createdAt;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMd5Checksum()
+    {
+        return $this->md5Checksum;
+    }
+    
+    /**
+     * @param string $md5Checksum
+     */
+    public function setMd5Checksum($md5Checksum)
+    {
+        $this->md5Checksum = $md5Checksum;
     }
 }

@@ -72,4 +72,17 @@ class UploadedFileSourceTest extends \PHPUnit_Framework_TestCase
         $source = new UploadedFileSource($uploadedFile);
         $source->save($filesystem->reveal(), $destinationPath);
     }
+
+    public function testGettingMd5Checksum()
+    {
+        $uploadedFile = $this->getMockBuilder(UploadedFile::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $uploadedFile->method('getPathname')->willReturn($filePath = __DIR__.'/../../stubs/files/smile.png');
+
+        $source = new UploadedFileSource($uploadedFile);
+
+        $this->assertEquals(md5_file($filePath), $source->getMd5Checksum());
+    }
 }

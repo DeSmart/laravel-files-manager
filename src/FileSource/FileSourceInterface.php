@@ -26,4 +26,11 @@ interface FileSourceInterface
      * @param string $destinationPath
      */
     public function save(Filesystem $filesystem, $destinationPath);
+
+    /**
+     * Return the md5 checksum of file
+     *
+     * @return string
+     */
+    public function getMd5Checksum();
 }

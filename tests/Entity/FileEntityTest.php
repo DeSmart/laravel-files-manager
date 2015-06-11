@@ -71,4 +71,13 @@ class FileEntityTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNull($entity->getCreatedAt());
     }
+
+    public function testSettingMd5Checksum()
+    {
+        $md5 = md5(time());
+        $entity = new FileEntity;
+        $entity->setMd5Checksum($md5);
+
+        $this->assertSame($md5, $entity->getMd5Checksum());
+    }
 }
