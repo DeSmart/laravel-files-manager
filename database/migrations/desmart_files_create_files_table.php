@@ -20,6 +20,7 @@ class DesmartFilesCreateFilesTable extends Migration
             $table->timestamp('created_at');
 
             $table->primary('id');
+            $table->unique('md5_checksum');
         });
 
         Schema::create('file_records', function ($table) {
