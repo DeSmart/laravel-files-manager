@@ -34,4 +34,22 @@ class File extends \Illuminate\Database\Eloquent\Model
 
         return $model;
     }
+
+    /**
+     * Convert model to entity
+     *
+     * @return \DeSmart\Files\Entity\FileEntity
+     */
+    public function toEntity()
+    {
+        $entity = new FileEntity;
+        $entity->setId($this->getKey());
+        $entity->setName($this->name);
+        $entity->setPath($this->path);
+        $entity->setSize($this->size);
+        $entity->setMd5Checksum($this->md5_checksum);
+        $entity->setCreatedAt($this->created_at);
+
+        return $entity;
+    }
 }

@@ -42,4 +42,25 @@ class FileTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertFalse((new File)->timestamps);
     }
+
+    public function testConvertingToEntity()
+    {
+        $model = new File;
+        $model->id = 1;
+        $model->name = 'Foo.jpg';
+        $model->path = 'ab/cd/Foo.jpg';
+        $model->size = 1000;
+        $model->md5_checksum = md5(time());
+        $model->created_at = null;
+
+        $entity = $model->toEntity();
+
+        $this->assertInstanceOf(FileEntity::class, $entity);
+        $this->assertEquals(1, $entity->getId());
+        $this->assertEquals('Foo.jpg', $entity->getName());
+        $this->assertEquals('ab/cd/Foo.jpg', $entity->getPath());
+        $this->assertEquals(1000, $entity->getSize());
+        $this->assertEquals($model->md5_checksum, $entity->getMd5Checksum());
+        $this->assertNull($entity->getCreatedAt());
+    }
 }
