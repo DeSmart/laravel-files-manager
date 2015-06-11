@@ -12,7 +12,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     {
         $entity = new FileEntity;
         $entity->setId(123);
-        $entity->setName('Foo');
+        $entity->setName('Foo.jpg');
         $entity->setPath('ab/cd/foo.png');
         $entity->setSize(1000);
         $entity->setCreatedAt(null);
