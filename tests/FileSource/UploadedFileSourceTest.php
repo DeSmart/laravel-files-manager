@@ -18,7 +18,7 @@ class UploadedFileSourceTest extends \PHPUnit_Framework_TestCase
         $uploadedFile->method('getClientOriginalName')->willReturn('Chrysanthemum.jpg');
 
         $source = new UploadedFileSource($uploadedFile);
-        $this->assertEquals('Chrysanthemum', $source->getName());
+        $this->assertEquals('Chrysanthemum.jpg', $source->getName());
     }
 
     public function testGettingEmptyName()

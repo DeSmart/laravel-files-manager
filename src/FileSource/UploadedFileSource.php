@@ -27,7 +27,7 @@ class UploadedFileSource implements FileSourceInterface
             return null;
         }
 
-        return pathinfo($name, PATHINFO_FILENAME);
+        return $name;
     }
 
     /**
