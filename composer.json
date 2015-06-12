@@ -21,6 +21,11 @@
             "DeSmart\\Files\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Stubs\\DeSmart\\Files\\": "stubs/"
+        }
+    },
     "repositories": [
       {
         "type": "composer",

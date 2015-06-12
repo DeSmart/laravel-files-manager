@@ -23,6 +23,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->configure();
 
         $this->registerManager();
+        $this->registerEntityFactory();
         $this->app->bind(GenericMapper::class, function () {
             return new GenericMapper($this->getStorage());
         });
@@ -48,6 +49,15 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             $manager->setMappers(...$mappers);
 
             return $manager;
+        });
+    }
+
+    protected function registerEntityFactory()
+    {
+        $this->app->bind(FileEntityFactory::class, function () {
+            $fileEntityClass = $this->app['config']->get('desmart_files.file_entity_class');
+
+            return new FileEntityFactory($fileEntityClass);
         });
     }
 
