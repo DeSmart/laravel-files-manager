@@ -33,6 +33,7 @@ In console run:
 
 ```bash
 cp vendor/desmart/files/database/migrations/* database/migrations/
+cp vendor/desmart/files/config/desmart_files.php config/desmart_files.php
 php artisan migrate
 ```
 
@@ -47,8 +48,10 @@ This package uses Laravels storage mechanism. By default package uses `upload` d
 // config/filesystems.php
 return [
     'disks' => [
-        'driver' => 'local',
-        'root'   => public_path('upload'),        
+        'upload' => [
+            'driver' => 'local',
+            'root'   => public_path('upload'),        
+        ],
     ],
 ];
 ```
