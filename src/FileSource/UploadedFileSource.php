@@ -1,7 +1,7 @@
 <?php namespace DeSmart\Files\FileSource;
 
-use Illuminate\Contracts\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Illuminate\Contracts\Filesystem\Filesystem as Storage;
 
 class UploadedFileSource implements FileSourceInterface
 {
@@ -41,9 +41,9 @@ class UploadedFileSource implements FileSourceInterface
     /**
      * {@inheritdoc}
      */
-    public function save(Filesystem $filesystem, $destinationPath)
+    public function save(Storage $storage, $destinationPath)
     {
-        $filesystem->put($destinationPath, file_get_contents($this->file->getPathname()));
+        $storage->put($destinationPath, file_get_contents($this->file->getPathname()));
     }
 
     /**

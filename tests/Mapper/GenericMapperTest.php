@@ -5,7 +5,7 @@ namespace test\DeSmart\Files\Mapper;
 use Prophecy\Argument;
 use DeSmart\Files\Entity\FileEntity;
 use DeSmart\Files\Mapper\GenericMapper;
-use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Contracts\Filesystem\Filesystem as Storage;
 
 class GenericMapperTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,14 +15,14 @@ class GenericMapperTest extends \PHPUnit_Framework_TestCase
         $entity = new FileEntity;
         $entity->setName($name = 'Foo.jpg');
 
-        $filesystem = $this->getMockBuilder(Filesystem::class)
+        $storage = $this->getMockBuilder(Storage::class)
             ->getMock();
 
-        $filesystem->method('exists')
+        $storage->method('exists')
             ->with($this->matches('%c%c/%c%c/Foo.jpg'))
             ->willReturn(false);
 
-        $mapper = new GenericMapper($filesystem);
+        $mapper = new GenericMapper($storage);
         $mapper->map($entity);
 
         $this->assertRegExp('#^\w{2}/\w{2}/Foo.jpg$#', $entity->getPath());
@@ -33,20 +33,20 @@ class GenericMapperTest extends \PHPUnit_Framework_TestCase
         $entity = new FileEntity;
         $entity->setName('Foo.jpg');
 
-        $filesystem = $this->getMockBuilder(Filesystem::class)
+        $storage = $this->getMockBuilder(Storage::class)
             ->getMock();
 
-        $filesystem->expects($this->at(0))
+        $storage->expects($this->at(0))
             ->method('exists')
             ->with($this->matches('%c%c/%c%c/Foo.jpg'))
             ->willReturn(true);
 
-        $filesystem->expects($this->at(1))
+        $storage->expects($this->at(1))
             ->method('exists')
             ->with($this->matches('%c%c/%c%c/Foo-%x.jpg'))
             ->willReturn(true);
 
-        $mapper = new GenericMapper($filesystem);
+        $mapper = new GenericMapper($storage);
         $mapper->map($entity);
 
         $this->assertRegExp('#^\w{2}/\w{2}/Foo-[a-f0-9]+\.jpg#', $entity->getPath());
@@ -58,10 +58,10 @@ class GenericMapperTest extends \PHPUnit_Framework_TestCase
         $entity->setName($name = 'Foo Bar.jpg');
         $escapedName = 'Foo-Bar.jpg';
 
-        $filesystem = $this->prophesize(Filesystem::class);
-        $filesystem->exists(Argument::any())->willReturn(false);
+        $storage = $this->prophesize(Storage::class);
+        $storage->exists(Argument::any())->willReturn(false);
 
-        $mapper = new GenericMapper($filesystem->reveal());
+        $mapper = new GenericMapper($storage->reveal());
         $mapper->map($entity);
 
         $this->assertRegExp('#^\w{2}/\w{2}/'.$escapedName.'$#', $entity->getPath());
@@ -72,20 +72,20 @@ class GenericMapperTest extends \PHPUnit_Framework_TestCase
         $entity = new FileEntity;
         $entity->setName('Foo Bar.jpg');
 
-        $filesystem = $this->getMockBuilder(Filesystem::class)
+        $storage = $this->getMockBuilder(Storage::class)
             ->getMock();
 
-        $filesystem->expects($this->at(0))
+        $storage->expects($this->at(0))
             ->method('exists')
             ->with($this->matches('%c%c/%c%c/Foo-Bar.jpg'))
             ->willReturn(true);
 
-        $filesystem->expects($this->at(1))
+        $storage->expects($this->at(1))
             ->method('exists')
             ->with($this->matches('%c%c/%c%c/Foo-Bar-%x.jpg'))
             ->willReturn(true);
 
-        $mapper = new GenericMapper($filesystem);
+        $mapper = new GenericMapper($storage);
         $mapper->map($entity);
 
         $this->assertRegExp('#^\w{2}/\w{2}/Foo-Bar-[a-f0-9]+\.jpg#', $entity->getPath());

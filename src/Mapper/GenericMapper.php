@@ -1,7 +1,7 @@
 <?php namespace DeSmart\Files\Mapper;
 
 use DeSmart\Files\Entity\FileEntity;
-use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Contracts\Filesystem\Filesystem as Storage;
 
 class GenericMapper implements MapperInterface
 {
@@ -9,11 +9,11 @@ class GenericMapper implements MapperInterface
     /**
      * @var \Illuminate\Contracts\Filesystem\Filesystem
      */
-    protected $filesystem;
+    protected $storage;
 
-    public function __construct(Filesystem $filesystem)
+    public function __construct(Storage $storage)
     {
-        $this->filesystem = $filesystem;
+        $this->storage = $storage;
     }
 
     /**
@@ -38,7 +38,7 @@ class GenericMapper implements MapperInterface
             $pathinfo['extension']
         );
 
-        while (true === $this->filesystem->exists($path)) {
+        while (true === $this->storage->exists($path)) {
             $path = sprintf(
                 '%s/%s-%s.%s',
                 $dir,

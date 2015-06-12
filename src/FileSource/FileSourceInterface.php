@@ -1,6 +1,6 @@
 <?php namespace DeSmart\Files\FileSource;
 
-use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Contracts\Filesystem\Filesystem as Storage;
 
 interface FileSourceInterface
 {
@@ -22,10 +22,10 @@ interface FileSourceInterface
     /**
      * Save file to given location
      *
-     * @param \Illuminate\Contracts\Filesystem\Filesystem $filesystem
+     * @param \Illuminate\Contracts\Filesystem\Filesystem $storage
      * @param string $destinationPath
      */
-    public function save(Filesystem $filesystem, $destinationPath);
+    public function save(Storage $storage, $destinationPath);
 
     /**
      * Return the md5 checksum of file

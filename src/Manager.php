@@ -2,8 +2,8 @@
 
 use DeSmart\Files\Mapper\MapperInterface;
 use DeSmart\Files\Entity\FileEntityFactory;
-use Illuminate\Contracts\Filesystem\Filesystem;
 use DeSmart\Files\FileSource\FileSourceInterface;
+use Illuminate\Contracts\Filesystem\Filesystem as Storage;
 
 class Manager
 {
@@ -21,18 +21,18 @@ class Manager
     /**
      * @var \Illuminate\Contracts\Filesystem\Filesystem
      */
-    protected $filesystem;
+    protected $storage;
 
     /**
      * @var \DeSmart\Files\Mapper\MapperInterface[]
      */
     protected $mappers = [];
 
-    public function __construct(FileRepository $repository, FileEntityFactory $entityFactory, Filesystem $filesystem)
+    public function __construct(FileRepository $repository, FileEntityFactory $entityFactory, Storage $storage)
     {
         $this->repository = $repository;
         $this->entityFactory = $entityFactory;
-        $this->filesystem = $filesystem;
+        $this->storage = $storage;
     }
 
     /**
@@ -65,7 +65,7 @@ class Manager
             $mapper->map($entity);
         }
 
-        $file->save($this->filesystem, $entity->getPath());
+        $file->save($this->storage, $entity->getPath());
         $this->repository->save($entity);
 
         return $entity;
