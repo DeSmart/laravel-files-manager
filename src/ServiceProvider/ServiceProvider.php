@@ -1,4 +1,4 @@
-<?php namespace DeSmart\Files;
+<?php namespace DeSmart\Files\ServiceProvider;
 
 use DeSmart\Files\Manager;
 use DeSmart\Files\FileRepository;
@@ -8,24 +8,29 @@ use DeSmart\Files\Entity\FileEntityFactory;
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
 
-    protected $configPath = __DIR__.'/../config/desmart_files.php';
+    protected $configPath = __DIR__.'/../../config/desmart_files.php';
 
     public function boot()
     {
         $this->publishes([
             $this->configPath => config_path('desmart_files.php'),
-            __DIR__.'/../database/migrations/' => database_path('/migrations'),
+            __DIR__.'/../../database/migrations/' => database_path('/migrations'),
         ]);
     }
 
     public function register()
     {
-        $this->mergeConfigFrom($this->configPath, 'desmart_files');
+        $this->configure();
 
         $this->registerManager();
         $this->app->bind(GenericMapper::class, function () {
             return new GenericMapper($this->getStorage());
         });
+    }
+
+    protected function configure()
+    {
+        $this->mergeConfigFrom($this->configPath, 'desmart_files');
     }
 
     protected function registerManager()
@@ -46,7 +51,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         });
     }
 
-    protected function getStorage() 
+    protected function getStorage()
     {
         $config = $this->app['config']->get('desmart_files');
 

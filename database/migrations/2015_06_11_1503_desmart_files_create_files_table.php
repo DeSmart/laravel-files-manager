@@ -19,7 +19,6 @@ class DesmartFilesCreateFilesTable extends Migration
             $table->string('md5_checksum', 32);
             $table->timestamp('created_at');
 
-            $table->primary('id');
             $table->unique('md5_checksum');
         });
 
@@ -36,8 +35,8 @@ class DesmartFilesCreateFilesTable extends Migration
             $table->timestamps();
 
             $table->foreign('file_id')
-                ->references('files')
-                ->on('id')
+                ->references('id')
+                ->on('files')
                 ->onDelete('cascade');
         });
     }
