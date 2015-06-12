@@ -42,4 +42,32 @@ class Manager
     {
         $this->mappers = $mappers;
     }
+
+    /**
+     * Store file in filesystem and database
+     *
+     * If file already exists in database no actions will be performed.
+     *
+     * @param \DeSmart\Files\FileSource\FileSourceInterface $file
+     * @return \DeSmart\Files\Entity\FileEntity
+     */
+    public function store(FileSourceInterface $file)
+    {
+        $entity = $this->repository->findByChecksum($file->getMd5Checksum());
+
+        if (null !== $entity) {
+            return $entity;
+        }
+
+        $entity = $this->entityFactory->createFromFileSource($file);
+
+        foreach ($this->mappers as $mapper) {
+            $mapper->map($entity);
+        }
+
+        $file->save($this->filesystem, $entity->getPath());
+        $this->repository->save($entity);
+
+        return $entity;
+    }
 }
