@@ -25,8 +25,8 @@ class DesmartFilesCreateFilesTable extends Migration
 
         Schema::create('file_records', function ($table) {
             $table->string('file_id', 32);
-            $table->string('file_record_id', 32);
-            $table->string('file_record_type');
+            $table->string('file_records_id', 32);
+            $table->string('file_records_type');
             $table->boolean('is_default')
                 ->default(0);
             $table->json('data')
@@ -37,6 +37,8 @@ class DesmartFilesCreateFilesTable extends Migration
                 ->references('id')
                 ->on('files')
                 ->onDelete('cascade');
+
+            $table->unique(['file_records_id', 'file_records_type']);
         });
     }
 
