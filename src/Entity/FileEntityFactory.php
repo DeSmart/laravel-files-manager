@@ -1,5 +1,6 @@
 <?php namespace DeSmart\Files\Entity;
 
+use DeSmart\Support\Uuid;
 use DeSmart\Files\FileSource\FileSourceInterface;
 
 class FileEntityFactory
@@ -40,6 +41,7 @@ class FileEntityFactory
     public function createFromFileSource(FileSourceInterface $file)
     {
         $entity = new $this->entityClassName;
+        $entity->setId(Uuid::generateUuid());
         $entity->setSize($file->getSize());
         $entity->setName($file->getName());
         $entity->setMd5Checksum($file->getMd5Checksum());

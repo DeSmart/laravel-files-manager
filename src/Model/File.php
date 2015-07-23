@@ -15,6 +15,8 @@ class File extends \Illuminate\Database\Eloquent\Model
      */
     public $timestamps = false;
 
+    public $incrementing = false;
+
     public function createFromEntity(FileEntity $entity)
     {
         $attributes = [
