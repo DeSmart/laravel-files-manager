@@ -1,5 +1,6 @@
 <?php namespace DeSmart\Files;
 
+use DeSmart\Support\Uuid;
 use Illuminate\Database\DatabaseManager;
 
 class FileRepository
@@ -38,21 +39,24 @@ class FileRepository
         return is_null($model) ? null : $model->toEntity();
     }
 
-    public function save(Entity\FileEntity $file)
+    public function insert(Entity\FileEntity $file)
     {
-        $exists = (null !== $file->getId());
+        $file->setId(Uuid::generateUuid());
+        $file->setCreatedAt(date_create());
+
         $model = $this->query->createFromEntity($file);
-
-        if (false === $exists) {
-            $model->created_at = date_create();
-        }
-
+        $model->exists = false;
         $model->save();
 
-        if (false === $exists) {
-            $file->setCreatedAt($model->created_at);
-            $file->setId($model->getKey());
-        }
+        return $file;
+    }
+
+    public function update(Entity\FileEntity $file)
+    {
+        $model = $this->query->createFromEntity($file);
+        $model->save();
+
+        return $file;
     }
 
     /**

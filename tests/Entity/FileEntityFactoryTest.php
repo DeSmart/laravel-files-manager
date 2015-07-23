@@ -23,7 +23,6 @@ class FileEntityFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($name, $entity->getName());
         $this->assertEquals($size, $entity->getSize());
         $this->assertEquals($md5Sum, $entity->getMd5Checksum());
-        $this->assertRegExp('/^[0-9a-f]{32}$/', $entity->getId());
 
         return $source;
     }

@@ -67,7 +67,7 @@ class Manager
         }
 
         $file->save($this->storage, $entity->getPath());
-        $this->repository->save($entity);
+        $this->repository->insert($entity);
 
         return $entity;
     }
