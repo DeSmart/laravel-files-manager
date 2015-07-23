@@ -1,5 +1,6 @@
 <?php namespace DeSmart\Files;
 
+use DeSmart\Files\Entity\FileEntity;
 use DeSmart\Files\Mapper\MapperInterface;
 use DeSmart\Files\Entity\FileEntityFactory;
 use DeSmart\Files\FileSource\FileSourceInterface;
@@ -69,5 +70,21 @@ class Manager
         $this->repository->save($entity);
 
         return $entity;
+    }
+
+    /**
+     * Remove file from DB and FS.
+     *
+     * This will happen only when file is not used (related with records) anymore.
+     *
+     * @param \DeSmart\Files\Entity\FileEntity $file
+     */
+    public function remove(FileEntity $file)
+    {
+
+        if (false === $this->repository->hasRelatedRecords($file)) {
+            $this->repository->remove($file);
+            $this->storage->delete($file->getPath());
+        }
     }
 }

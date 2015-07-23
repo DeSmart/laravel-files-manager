@@ -46,4 +46,14 @@ class FileRepository
             $entity->setId($model->getKey());
         }
     }
+
+    public function hasRelatedRecords(Entity\FileEntity $file)
+    {
+        // @todo here be dragons
+    }
+
+    public function remove(Entity\FileEntity $file)
+    {
+        // @todo here be dragons
+    }
 }

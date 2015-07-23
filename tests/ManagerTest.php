@@ -57,4 +57,40 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($entity, $manager->store($source->reveal()));
     }
+
+    public function testRemovingFileWithoutRelatedRecords()
+    {
+        $entity = new FileEntity;
+        $entity->setPath($path = 'ab/cd/ef.png');
+
+        $repository = $this->prophesize(FileRepository::class);
+        $repository->hasRelatedRecords($entity)->willReturn(false);
+        $repository->remove($entity)->shouldBeCalled();
+
+        $storage = $this->prophesize(Storage::class);
+        $storage->delete($path)->shouldBeCalled();
+
+        $factory = $this->prophesize(FileEntityFactory::class);
+
+        $manager = new Manager($repository->reveal(), $factory->reveal(), $storage->reveal());
+        $manager->remove($entity);
+    }
+
+    public function testRemovingFileWhenIsRelatedToRecords()
+    {
+        $entity = new FileEntity;
+        $entity->setPath($path = 'ab/cd/ef.png');
+
+        $repository = $this->prophesize(FileRepository::class);
+        $repository->hasRelatedRecords($entity)->willReturn(true);
+        $repository->remove($entity)->shouldNotBeCalled();
+
+        $storage = $this->prophesize(Storage::class);
+        $storage->delete($path)->shouldNotBeCalled();
+
+        $factory = $this->prophesize(FileEntityFactory::class);
+
+        $manager = new Manager($repository->reveal(), $factory->reveal(), $storage->reveal());
+        $manager->remove($entity);
+    }
 }
