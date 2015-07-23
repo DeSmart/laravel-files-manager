@@ -70,8 +70,14 @@ class FileRepository
         return $count > 0;
     }
 
+    /**
+     * Remove file from DB
+     *
+     * @param \DeSmart\Files\Entity\FileEntity $file
+     */
     public function remove(Entity\FileEntity $file)
     {
-        // @todo here be dragons
+        $model = $this->query->createFromEntity($file);
+        $model->delete();
     }
 }
