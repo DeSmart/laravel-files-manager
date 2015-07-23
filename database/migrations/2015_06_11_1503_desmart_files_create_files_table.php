@@ -24,10 +24,8 @@ class DesmartFilesCreateFilesTable extends Migration
         });
 
         Schema::create('file_records', function ($table) {
-            $table->string('file_id', 32)
-                ->unsigned();
-            $table->string('file_record_id', 32)
-                ->unsigned();
+            $table->string('file_id', 32);
+            $table->string('file_record_id', 32);
             $table->string('file_record_type');
             $table->boolean('is_default')
                 ->default(0);
