@@ -1,6 +1,7 @@
 <?php namespace DeSmart\Files\ServiceProvider;
 
 use DeSmart\Files\Manager;
+use DeSmart\Files\Model\File;
 use DeSmart\Files\FileRepository;
 use DeSmart\Files\Mapper\GenericMapper;
 use DeSmart\Files\Entity\FileEntityFactory;
@@ -24,6 +25,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
         $this->registerManager();
         $this->registerEntityFactory();
+        $this->registerFileRepository();
         $this->app->bind(GenericMapper::class, function () {
             return new GenericMapper($this->getStorage());
         });
@@ -58,6 +60,16 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             $fileEntityClass = $this->app['config']->get('desmart_files.file_entity_class');
 
             return new FileEntityFactory($fileEntityClass);
+        });
+    }
+
+    protected function registerFileRepository()
+    {
+        $this->app->bind(FileRepository::class, function () {
+            return new FileRepository(
+                $this->app->make(File::class),
+                $this->app->make('db')
+            );
         });
     }
 
