@@ -9,7 +9,7 @@ class DesmartFilesCreateFilesTable extends Migration
     public function up()
     {
         Schema::create('files', function ($table) {
-            $table->increments('id');
+            $table->string('id', 32);
             $table->string('name')
                 ->nullable();
             $table->string('path');
@@ -19,13 +19,14 @@ class DesmartFilesCreateFilesTable extends Migration
             $table->string('md5_checksum', 32);
             $table->timestamp('created_at');
 
+            $table->primary('id');
             $table->unique('md5_checksum');
         });
 
         Schema::create('file_records', function ($table) {
-            $table->integer('file_id')
+            $table->string('file_id', 32)
                 ->unsigned();
-            $table->integer('file_record_id')
+            $table->string('file_record_id', 32)
                 ->unsigned();
             $table->string('file_record_type');
             $table->boolean('is_default')
