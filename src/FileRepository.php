@@ -67,7 +67,7 @@ class FileRepository
      */
     public function hasRelatedRecords(Entity\FileEntity $file)
     {
-        $count = (int) $this->db->from('file_records')
+        $count = (int) $this->db->table('file_records')
             ->where('file_id', $file->getId())
             ->count();
 
