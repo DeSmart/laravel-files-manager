@@ -26,8 +26,9 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->registerManager();
         $this->registerEntityFactory();
         $this->registerFileRepository();
+        $this->registerStorage();
         $this->app->bind(GenericMapper::class, function () {
-            return new GenericMapper($this->getStorage());
+            return new GenericMapper($this->app->make('desmart_files.storage'));
         });
     }
 
@@ -44,7 +45,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             $manager = new Manager(
                 $this->app->make(FileRepository::class),
                 $this->app->make(FileEntityFactory::class),
-                $this->getStorage()
+                $this->app->make('desmart_files.storage')
             );
 
             $mappers = array_map([$this->app, 'make'], $config['mappers']);
@@ -73,10 +74,12 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         });
     }
 
-    protected function getStorage()
+    protected function registerStorage()
     {
         $config = $this->app['config']->get('desmart_files');
 
-        return $this->app['filesystem']->disk($config['storage_disk']);
+        $this->app->bind('desmart_files.storage', function () use ($config) {
+            return $this->app['filesystem']->disk($config['storage_disk']);
+        });
     }
 }
