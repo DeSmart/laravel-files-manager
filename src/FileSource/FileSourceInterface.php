@@ -33,4 +33,11 @@ interface FileSourceInterface
      * @return string
      */
     public function getMd5Checksum();
+
+    /**
+     * Return file's upload path
+     *
+     * @return string
+     */
+    public function getPath();
 }
