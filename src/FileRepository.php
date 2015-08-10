@@ -16,7 +16,7 @@ class FileRepository
      */
     protected $db;
 
-    public function __construct(Model\File $query, DatabaseManager $db)
+    public function __construct($query, DatabaseManager $db)
     {
         $this->query = $query;
         $this->db = $db;
