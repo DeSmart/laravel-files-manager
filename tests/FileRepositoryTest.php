@@ -3,9 +3,9 @@
 namespace test\DeSmart\Files;
 
 use Prophecy\Argument;
-use DeSmart\Files\Model\File;
+use Ggd\Files\Model\File;
+use Ggd\Files\Entity\FileEntity;
 use DeSmart\Files\FileRepository;
-use DeSmart\Files\Entity\FileEntity;
 use Illuminate\Database\DatabaseManager;
 
 class FileRepositoryTest extends \PHPUnit_Framework_TestCase
