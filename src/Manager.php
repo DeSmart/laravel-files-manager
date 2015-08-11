@@ -63,7 +63,7 @@ class Manager
         $entity = $this->entityFactory->createFromFileSource($file);
 
         foreach ($this->mappers as $mapper) {
-            $mapper->map($entity);
+            $mapper->map($entity, $file);
         }
 
         $file->save($this->storage, $entity->getPath());

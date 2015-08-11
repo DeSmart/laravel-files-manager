@@ -27,7 +27,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
         $repository->findByChecksum($entity->getMd5Checksum())->willReturn(null);
         $factory->createFromFileSource($source)->willReturn($entity);
-        $mapper->map($entity)->shouldBeCalled();
+        $mapper->map($entity, $source->reveal())->shouldBeCalled();
         $repository->insert($entity)->shouldBeCalled();
         $source->getMd5Checksum()->willReturn($entity->getMd5Checksum());
         $source->save($storage, $path)->shouldBeCalled();

@@ -53,4 +53,12 @@ class UploadedFileSource implements FileSourceInterface
     {
         return md5_file($this->file->getPathname());
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPath()
+    {
+        return $this->file->getRealPath();
+    }
 }

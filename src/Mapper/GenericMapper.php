@@ -1,6 +1,7 @@
 <?php namespace DeSmart\Files\Mapper;
 
 use DeSmart\Files\Entity\FileEntity;
+use DeSmart\Files\FileSource\FileSourceInterface;
 use Illuminate\Contracts\Filesystem\Filesystem as Storage;
 
 class GenericMapper implements MapperInterface
@@ -19,7 +20,7 @@ class GenericMapper implements MapperInterface
     /**
      * {@inheritdoc}
      */
-    public function map(FileEntity $file)
+    public function map(FileEntity $file, FileSourceInterface $fileSource)
     {
         $dir = $this->generateDirname($file);
         $path = $this->generatePath($dir, $file);
