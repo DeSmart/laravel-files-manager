@@ -56,18 +56,19 @@ class Manager
     {
         $entity = $this->repository->findByChecksum($file->getMd5Checksum());
 
-        if (null !== $entity) {
-            return $entity;
+        if (null === $entity) {
+            $entity = $this->entityFactory->createFromFileSource($file);
+
+            foreach ($this->mappers as $mapper) {
+                $mapper->map($entity, $file);
+            }
+
+            $this->repository->insert($entity);
         }
 
-        $entity = $this->entityFactory->createFromFileSource($file);
-
-        foreach ($this->mappers as $mapper) {
-            $mapper->map($entity, $file);
+        if (false === $this->storage->exists($entity->getPath())) {
+            $file->save($this->storage, $entity->getPath());
         }
-
-        $file->save($this->storage, $entity->getPath());
-        $this->repository->insert($entity);
 
         return $entity;
     }
