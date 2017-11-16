@@ -25,7 +25,7 @@ class File extends \Illuminate\Database\Eloquent\Model
             'path' => $entity->getPath(),
             'size' => $entity->getSize(),
             'md5_checksum' => $entity->getMd5Checksum(),
-            'created_at' => null,
+            'created_at' => $entity->getCreatedAt(),
         ];
 
         $exists = (null !== $entity->getId());
