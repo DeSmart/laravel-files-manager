@@ -29,8 +29,8 @@
     },
     "repositories": [
       {
-        "type": "composer",
-        "url": "http://dev:o4ywKVHjvTJwkLHlgyl1@packagist.desmart.com"
+        "type": "vcs",
+        "url": "https://github.com/DeSmart/support"
       }
     ],
     "minimum-stability": "dev",
